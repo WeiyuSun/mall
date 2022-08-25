@@ -3,8 +3,8 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         druid:
             driver-class-name: com.mysql.cj.jdbc.Driver
-            url: jdbc:mysql://149.28.126.51:3306/mall_admin?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-            username: 'weiyu'
+            url: jdbc:mysql://149.28.126.51:3306/mall_admin?useUnicode=true&characterEncoding=UTF-8
+            username: weiyu
             password: '0000'
             initial-size: 10
             max-active: 100
