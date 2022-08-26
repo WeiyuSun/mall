@@ -1,3 +1,7 @@
+use mall_sms;
+show tables;
+drop database mall_sms;
+
 create database mall_sms;
 use mall_sms;
 
@@ -293,3 +297,5 @@ create table sms_spu_bounds
 );
 
 alter table sms_spu_bounds comment '商品spu积分设置';
+
+show tables;

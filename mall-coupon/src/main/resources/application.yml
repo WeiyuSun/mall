@@ -5,6 +5,14 @@ spring:
     url: jdbc:mysql://149.28.126.51:3306/mall_sms?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
 
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+  application:
+    name: mall-coupon
+
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*xml
   global-config:
@@ -15,3 +23,5 @@ server:
   port: 7001
   servlet:
     context-path: /mall
+
+
