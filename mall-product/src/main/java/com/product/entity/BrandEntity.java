@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
-import java.util.Date;
+import com.common.validator.constraints.LimitedValue;
+import com.common.validator.group.AddGroup;
+import com.common.validator.group.UpdateGroup;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
-import org.mybatis.spring.annotation.MapperScan;
-
 import javax.validation.constraints.*;
 
 /**
@@ -27,46 +27,46 @@ public class BrandEntity implements Serializable {
 	 * brand id
 	 */
 	@TableId
-	@Null(message = "Dont accept id from outside")
+	@NotNull(message = "Brand id missing", groups = {UpdateGroup.class})
+	@Null(message = "Do not accept brand id from outside", groups = {AddGroup.class})
 	private Long brandId;
 	/**
 	 * brand name
 	 */
-	@NotBlank(message = "Brand name cannot be empty")
+	@NotBlank(message = "Brand name cannot be empty", groups = {AddGroup.class})
 	private String name;
 
 	/**
 	 * logo address in oss
 	 */
-	@NotEmpty
-	@URL(message = "Brand logo address must be an valid url")
+	@NotEmpty(message = "logo address cannot be empty", groups = {AddGroup.class})
+	@URL(message = "Brand logo address must be an valid url", groups = {AddGroup.class, UpdateGroup.class})
 	private String logo;
 
 	/**
 	 * brand description
 	 */
-
 	private String descript;
 
 	/**
 	 * show status, 1 -> active. 0 -> inactive
 	 */
-	@NotNull
-	@Min(value = 0, message = "status value can only be 0 or 1")
-	@Max(value = 1, message = "status value can only be 0 or 1")
+	@NotNull(groups = {AddGroup.class}, message = "status value missing")
+	@LimitedValue(values = {0, 1}, message = "status value can only be 0 or 1", groups ={AddGroup.class, UpdateGroup.class})
 	private Integer showStatus;
 
 	/**
 	 * the search index
 	 */
-	@Pattern(regexp ="/^[a-zA-Z]{1}$/", message = "first letter is one character from a-z or A-Z")
+	@NotNull(groups = {AddGroup.class, UpdateGroup.class}, message = "search index missing")
+	@Pattern(regexp ="^[a-zA-Z{1}]$", message = "first letter is one character from a-z or A-Z", groups = {AddGroup.class, UpdateGroup.class})
 	private String firstLetter;
 	/**
 	 * 排序
 	 */
-	@NotNull
-	@Max(value = 100, message = "Sort value must an integer between 0 and 100")
-	@Min(value = 0, message = "Sort value must an integer between 0 and 100")
+	@NotNull(groups = {AddGroup.class}, message = "Sort value missing")
+	@Max(value = 100, message = "Sort value must an integer between 0 and 100", groups = {AddGroup.class, UpdateGroup.class})
+	@Min(value = 0, message = "Sort value must an integer between 0 and 100", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer sort;
 
 }

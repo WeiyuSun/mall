@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.common.utils.ResultCode;
+import com.common.validator.group.AddGroup;
+import com.common.validator.group.UpdateGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,17 +66,9 @@ BrandController {
      * 保存
      */
     @RequestMapping("/save")
-    public R save(@Valid @RequestBody BrandEntity brand, BindingResult result){
+    public R save(@Validated(AddGroup.class) @RequestBody BrandEntity brand, BindingResult result){
         if(result != null && result.hasErrors()){
-            Map<String, String> errors = new HashMap<String, String>(8);
-            result.getFieldErrors().forEach((error) ->{
-                String message = error.getDefaultMessage();
-                String field = error.getField();
-
-                errors.put(field, message);
-            });
-
-            return R.error(ResultCode.INVALID_DATA, "Invalid submitted data").put("data", errors);
+            return produceErrorResult(result);
         }
 		brandService.save(brand);
 
@@ -84,10 +79,17 @@ BrandController {
      * 修改
      */
     @RequestMapping("/update")
-    //@RequiresPermissions("product:brand:update")
-    public R update(@RequestBody BrandEntity brand){
-		brandService.updateById(brand);
+    public R update(@Validated(UpdateGroup.class) @RequestBody BrandEntity brand, BindingResult result){
+        brand = new BrandEntity();
+        brand.setBrandId(1L);
+        brand.setName("HUAWEI");
 
+        System.out.println(brand);
+        if(result != null && result.hasErrors()){
+            return produceErrorResult(result);
+        }
+
+		brandService.updateById(brand);
         return R.ok();
     }
 
@@ -95,11 +97,23 @@ BrandController {
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("product:brand:delete")
     public R delete(@RequestBody Long[] brandIds){
 		brandService.removeByIds(Arrays.asList(brandIds));
 
         return R.ok();
     }
+
+    private R produceErrorResult(BindingResult result){
+        Map<String, String> errors = new HashMap<String, String>(8);
+        result.getFieldErrors().forEach((error) ->{
+            String message = error.getDefaultMessage();
+            String field = error.getField();
+
+            errors.put(field, message);
+        });
+
+        return R.error(ResultCode.INVALID_DATA, "Invalid submitted data").put("data", errors);
+    }
+
 
 }
