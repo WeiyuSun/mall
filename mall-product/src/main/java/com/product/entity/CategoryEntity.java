@@ -62,6 +62,7 @@ public class CategoryEntity implements Serializable {
 	 */
 	private Integer productCount;
 
+	// sub categories
 	@TableField(exist = false)
-	private List<CategoryEntity> subCategories;
+	private List<CategoryEntity> children;
 }

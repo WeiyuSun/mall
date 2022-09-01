@@ -1,0 +1,18 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+    alicloud:
+      access-key: LTAI5tPBG3ur4kNADjhaADcK
+      secret-key: 6jZ2WMO3uod2DSRgXfA2L16gjKgRtm
+      oss:
+        endpoint: oss-us-west-1.aliyuncs.com
+        bucket: weiyu-mall
+  application:
+    name: mall-thirdpart
+server:
+  port: 30000
+  servlet:
+    context-path: /mall

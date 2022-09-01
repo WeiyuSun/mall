@@ -56,7 +56,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         return categoryEntities
                 .stream()
                 .filter(categoryEntity -> categoryEntity.getCatLevel() == 1) // get all root categories
-                .peek(categoryEntity -> categoryEntity.setSubCategories(getCategoryTreeRec(categoryEntity, categoryEntities)))
+                .peek(categoryEntity -> categoryEntity.setChildren(getCategoryTreeRec(categoryEntity, categoryEntities)))
                 .sorted(Comparator.comparingInt(CategoryEntity::getSort)).collect(Collectors.toList());
     }
 
@@ -90,7 +90,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         return categoryEntities
                 .stream()
                 .filter(categoryEntity -> root.getCatId().equals(categoryEntity.getParentCid()))
-                .peek(categoryEntity -> categoryEntity.setSubCategories(getCategoryTreeRec(categoryEntity, categoryEntities)))
+                .peek(categoryEntity -> categoryEntity.setChildren(getCategoryTreeRec(categoryEntity, categoryEntities)))
                 .sorted(Comparator.comparingInt(CategoryEntity::getSort))
                 .collect(Collectors.toList());
     }

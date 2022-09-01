@@ -1,9 +1,15 @@
 package com.product.controller;
 
+import java.security.Signature;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.common.utils.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +21,7 @@ import com.product.service.BrandService;
 import com.common.utils.PageUtils;
 import com.common.utils.R;
 
+import javax.validation.Valid;
 
 
 /**
@@ -26,7 +33,8 @@ import com.common.utils.R;
  */
 @RestController
 @RequestMapping("product/brand")
-public class BrandController {
+public class
+BrandController {
     @Autowired
     private BrandService brandService;
 
@@ -57,8 +65,18 @@ public class BrandController {
      * 保存
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("product:brand:save")
-    public R save(@RequestBody BrandEntity brand){
+    public R save(@Valid @RequestBody BrandEntity brand, BindingResult result){
+        if(result != null && result.hasErrors()){
+            Map<String, String> errors = new HashMap<String, String>(8);
+            result.getFieldErrors().forEach((error) ->{
+                String message = error.getDefaultMessage();
+                String field = error.getField();
+
+                errors.put(field, message);
+            });
+
+            return R.error(ResultCode.INVALID_DATA, "Invalid submitted data").put("data", errors);
+        }
 		brandService.save(brand);
 
         return R.ok();
