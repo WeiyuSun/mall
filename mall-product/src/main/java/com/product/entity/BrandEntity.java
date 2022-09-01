@@ -27,6 +27,7 @@ public class BrandEntity implements Serializable {
 	 * brand id
 	 */
 	@TableId
+	@Null(message = "Dont accept id from outside")
 	private Long brandId;
 	/**
 	 * brand name
@@ -44,6 +45,7 @@ public class BrandEntity implements Serializable {
 	/**
 	 * brand description
 	 */
+
 	private String descript;
 
 	/**
