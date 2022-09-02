@@ -8,6 +8,7 @@ import com.common.validator.constraints.LimitedValue;
 import com.common.validator.group.AddGroup;
 import com.common.validator.group.UpdateGroup;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 import javax.validation.constraints.*;
 
@@ -58,8 +59,10 @@ public class BrandEntity implements Serializable {
 	/**
 	 * the search index
 	 */
-	@NotNull(groups = {AddGroup.class, UpdateGroup.class}, message = "search index missing")
-	@Pattern(regexp ="^[a-zA-Z{1}]$", message = "first letter is one character from a-z or A-Z", groups = {AddGroup.class, UpdateGroup.class})
+	@NotNull(groups = {AddGroup.class}, message = "search index missing")
+	@Length(min = 1, max = 1, message = "first letter is one character from a-z or A-Z", groups = {AddGroup.class, UpdateGroup.class})
+	@Pattern(regexp = "^[a-zA-Z]$", message = "first letter is one character from a-z or A-Z",groups = {AddGroup.class, UpdateGroup.class})
+	//@Pattern(regexp ="^[a-zA-Z{1}]$", message = "first letter is one character from a-z or A-Z", groups = {AddGroup.class, UpdateGroup.class})
 	private String firstLetter;
 	/**
 	 * 排序

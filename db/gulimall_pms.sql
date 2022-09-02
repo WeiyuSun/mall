@@ -87,13 +87,14 @@ alter table pms_attr_group comment '属性分组';
 create table pms_brand
 (
    brand_id             bigint not null auto_increment comment '品牌id',
-   name                 char(50) comment '品牌名',
+   name                 varchar(50) comment '品牌名' ,
    logo                 varchar(2000) comment '品牌logo地址',
    descript             longtext comment '介绍',
    show_status          tinyint comment '显示状态[0-不显示；1-显示]',
    first_letter         char(1) comment '检索首字母',
    sort                 int comment '排序',
-   primary key (brand_id)
+   primary key (brand_id),
+   unique index (brand_id, name)
 );
 
 alter table pms_brand comment '品牌';
@@ -104,7 +105,7 @@ alter table pms_brand comment '品牌';
 create table pms_category
 (
    cat_id               bigint not null auto_increment comment '分类id',
-   name                 char(50) comment '分类名称',
+   name                 varchar(50) comment '分类名称' ,
    parent_cid           bigint comment '父分类id',
    cat_level            int comment '层级',
    show_status          tinyint comment '是否显示[0-不显示，1显示]',
@@ -112,7 +113,8 @@ create table pms_category
    icon                 char(255) comment '图标地址',
    product_unit         char(50) comment '计量单位',
    product_count        int comment '商品数量',
-   primary key (cat_id)
+   primary key (cat_id),
+   unique index(cat_id, name)
 );
 
 alter table pms_category comment '商品三级分类';
@@ -125,9 +127,11 @@ create table pms_category_brand_relation
    id                   bigint not null auto_increment,
    brand_id             bigint comment '品牌id',
    catelog_id           bigint comment '分类id',
-   brand_name           varchar(255),
-   catelog_name         varchar(255),
-   primary key (id)
+   brand_name           varchar(50),
+   catelog_name         varchar(50),
+   primary key (id),
+   foreign key (brand_id, brand_name) references pms_brand(brand_id, name) ON UPDATE CASCADE ON DELETE RESTRICT,
+   foreign key (catelog_id, catelog_name) references pms_category(cat_id, name) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 alter table pms_category_brand_relation comment '品牌分类关联';

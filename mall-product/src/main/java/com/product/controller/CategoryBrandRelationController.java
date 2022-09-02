@@ -1,20 +1,18 @@
 package com.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.product.entity.CategoryBrandRelationEntity;
 import com.product.service.CategoryBrandRelationService;
 import com.common.utils.PageUtils;
 import com.common.utils.R;
 
+import javax.validation.constraints.Pattern;
 
 
 /**
@@ -25,16 +23,22 @@ import com.common.utils.R;
  * @date 2022-08-24 23:44:23
  */
 @RestController
-@RequestMapping("product/categorybrandrelation")
+@RequestMapping("product/categoryBrandRelation")
 public class CategoryBrandRelationController {
     @Autowired
     private CategoryBrandRelationService categoryBrandRelationService;
 
+
+    @GetMapping("/catelog/list")
+    public R listRelatedCat(@RequestParam("brandId") Long brandId){
+        List<CategoryBrandRelationEntity> result = categoryBrandRelationService.listRelatedCat(brandId);
+
+        return R.ok().put("data", result);
+    }
     /**
      * 列表
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("product:categorybrandrelation:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = categoryBrandRelationService.queryPage(params);
 
@@ -57,10 +61,8 @@ public class CategoryBrandRelationController {
      * 保存
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("product:categorybrandrelation:save")
     public R save(@RequestBody CategoryBrandRelationEntity categoryBrandRelation){
-		categoryBrandRelationService.save(categoryBrandRelation);
-
+        categoryBrandRelationService.saveCatBrandRelation(categoryBrandRelation);
         return R.ok();
     }
 

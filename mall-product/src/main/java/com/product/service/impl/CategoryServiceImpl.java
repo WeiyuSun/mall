@@ -3,9 +3,7 @@ package com.product.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -51,13 +49,35 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
      */
     @Override
     public List<CategoryEntity> listByTree() {
-        List<CategoryEntity> categoryEntities = baseMapper.selectList(null);
+        List<CategoryEntity> allEntities = baseMapper.selectList(null);
+        HashMap<Long, CategoryEntity> allEntitiesInHashMap= new HashMap<>();
 
-        return categoryEntities
-                .stream()
-                .filter(categoryEntity -> categoryEntity.getCatLevel() == 1) // get all root categories
-                .peek(categoryEntity -> categoryEntity.setChildren(getCategoryTreeRec(categoryEntity, categoryEntities)))
-                .sorted(Comparator.comparingInt(CategoryEntity::getSort)).collect(Collectors.toList());
+        for(CategoryEntity entity: allEntities) {
+            allEntitiesInHashMap.put(entity.getCatId(), entity);
+        }
+
+        ArrayList<CategoryEntity> categoryTree = new ArrayList<CategoryEntity>();
+        for(CategoryEntity entity: allEntities){
+            if(entity.getCatLevel() == 1){
+                categoryTree.add(entity);
+            }
+            else {
+                CategoryEntity parent = allEntitiesInHashMap.get(entity.getParentCid());
+
+                if(parent != null){
+                    List<CategoryEntity> childrenListFromParent;
+
+                    if((childrenListFromParent = parent.getChildren()) == null){
+                        childrenListFromParent = new LinkedList<>();
+                        parent.setChildren(childrenListFromParent);
+                    }
+
+                    childrenListFromParent.add(entity);
+                }
+            }
+        }
+
+        return categoryTree;
     }
 
 
@@ -67,31 +87,22 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
          baseMapper.deleteBatchIds(ids);
     }
 
-    /**
-     * <p>
-     * get category tree for a root category
-     * <p>
-     * for example, the category tree for shoes should be something like:
-     * shoes
-     * ｜----- Athletic shoes
-     * ｜             ｜----- Golf shoes
-     * ｜             ｜----- Running shoes
-     * ｜             ｜----- Climbing shoes
-     * ｜----- boots
-     * ｜----- high-heeled shoes
-     * ｜----- ...
-     *
-     * @param root             the root category
-     * @param categoryEntities the list of all categories
-     * @return return a tree as List, like example above
-     */
-    private List<CategoryEntity> getCategoryTreeRec(CategoryEntity root, List<CategoryEntity> categoryEntities) {
+    @Override
+    public Long[] findCatelogPath(Long catelogId) {
+        LinkedList<Long> path = new LinkedList<>();
 
-        return categoryEntities
-                .stream()
-                .filter(categoryEntity -> root.getCatId().equals(categoryEntity.getParentCid()))
-                .peek(categoryEntity -> categoryEntity.setChildren(getCategoryTreeRec(categoryEntity, categoryEntities)))
-                .sorted(Comparator.comparingInt(CategoryEntity::getSort))
-                .collect(Collectors.toList());
+        CategoryEntity category = getById(catelogId);
+        int size = 1;
+        while (category.getParentCid() != 0){
+            long currId = category.getCatId();
+            path.addFirst(currId);
+            category = getById(category.getParentCid());
+            size ++;
+        }
+
+        path.addFirst(category.getCatId());
+
+
+        return path.toArray(new Long[size]);
     }
 }

@@ -80,13 +80,12 @@ BrandController {
      */
     @RequestMapping("/update")
     public R update(@Validated(UpdateGroup.class) @RequestBody BrandEntity brand, BindingResult result){
-        brand = new BrandEntity();
-        brand.setBrandId(1L);
-        brand.setName("HUAWEI");
 
         System.out.println(brand);
         if(result != null && result.hasErrors()){
-            return produceErrorResult(result);
+            R r = produceErrorResult(result);
+            System.out.println(r);
+            return r;
         }
 
 		brandService.updateById(brand);
