@@ -60,7 +60,9 @@ create table pms_attr_attrgroup_relation
    attr_id              bigint comment '属性id',
    attr_group_id        bigint comment '属性分组id',
    attr_sort            int comment '属性组内排序',
-   primary key (id)
+   primary key (id),
+   foreign key (attr_id) references pms_attr(attr_id),
+   foreign key (attr_group_id) references pms_attr_group(attr_group_id)
 );
 
 alter table pms_attr_attrgroup_relation comment '属性&属性分组关联';

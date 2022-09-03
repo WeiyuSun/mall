@@ -42,6 +42,7 @@ public class AttrGroupController {
     @RequestMapping("/list/{id}")
     public R list(@RequestParam Map<String, Object> params, @PathVariable("id") Long id){
 //        PageUtils page = attrGroupService.queryPage(params);
+        System.out.println("get id " + id);
         PageUtils page = attrGroupService.queryPage(params, id);
         return R.ok().put("page", page);
     }
