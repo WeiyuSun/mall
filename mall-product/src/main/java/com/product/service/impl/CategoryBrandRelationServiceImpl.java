@@ -1,5 +1,6 @@
 package com.product.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.product.dao.BrandDao;
 import com.product.dao.CategoryDao;
 import com.product.entity.BrandEntity;
@@ -18,6 +19,7 @@ import com.common.utils.Query;
 import com.product.dao.CategoryBrandRelationDao;
 import com.product.entity.CategoryBrandRelationEntity;
 import com.product.service.CategoryBrandRelationService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("categoryBrandRelationService")
@@ -56,4 +58,27 @@ public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandR
         this.save(categoryBrandRelation);
     }
 
+    @Override
+    @Transactional
+    public void updateBrandName(Long targetBrandId, String newBrandName) {
+        assert (targetBrandId != null && newBrandName != null);
+
+        CategoryBrandRelationEntity entity = new CategoryBrandRelationEntity();
+        entity.setBrandId(targetBrandId);
+        entity.setBrandName(newBrandName);
+
+        this.update(entity, new UpdateWrapper<CategoryBrandRelationEntity>().eq("brand_id", targetBrandId));
+    }
+
+    @Override
+    @Transactional
+    public void updateCatName(Long targetCatId, String newCatName) {
+        assert (targetCatId != null && newCatName != null);
+        CategoryBrandRelationEntity entity = new CategoryBrandRelationEntity();
+        entity.setCatelogId(targetCatId);
+        entity.setCatelogName(newCatName);
+        System.out.println("cat is " + entity);
+
+        this.update(entity, new UpdateWrapper<CategoryBrandRelationEntity>().eq("catelog_id", targetCatId));
+    }
 }

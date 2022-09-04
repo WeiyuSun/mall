@@ -1,6 +1,10 @@
 package com.product.service.impl;
 
+import com.product.service.CategoryBrandRelationService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.logging.stdout.StdOutImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -20,7 +24,8 @@ import com.product.service.CategoryService;
 @Slf4j
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
-
+    @Autowired
+    private CategoryBrandRelationService categoryBrandRelationService;
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<CategoryEntity> page = this.page(new Query<CategoryEntity>().getPage(params), new QueryWrapper<CategoryEntity>());
@@ -104,5 +109,15 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
 
         return path.toArray(new Long[size]);
+    }
+
+    @Override
+    public void updateCategory(CategoryEntity category) {
+        this.updateById(category);
+        System.out.println("update category finished");
+        if(!StringUtils.isEmpty(category.getName())){
+            System.out.println("updating Cascade");
+            categoryBrandRelationService.updateCatName(category.getCatId(), category.getName());
+        }
     }
 }

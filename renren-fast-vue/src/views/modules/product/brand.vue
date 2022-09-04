@@ -362,6 +362,7 @@ export default {
         })
       }).then(({data}) => {
         this.cateRelationTableData = data.data;
+        console.log("table", this.cateRelationTableData);
       });
     },
     // 获取数据列表

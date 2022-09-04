@@ -10,7 +10,7 @@
                         Add
                     </el-button>
 
-                    <el-button v-if="node.level <= 2" type="text" size="mini" @click="() => edit(data)">
+                    <el-button v-if="node.level <= 3" type="text" size="mini" @click="() => edit(data)">
                         Edit
                     </el-button>
 

@@ -88,7 +88,8 @@ BrandController {
             return r;
         }
 
-		brandService.updateById(brand);
+        brandService.updateBrand(brand);
+		//brandService.updateById(brand);
         return R.ok();
     }
 
