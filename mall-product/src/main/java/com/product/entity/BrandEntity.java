@@ -1,8 +1,6 @@
 package com.product.entity;
-
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
 import java.io.Serializable;
 import com.common.validator.constraints.LimitedValue;
 import com.common.validator.group.AddGroup;

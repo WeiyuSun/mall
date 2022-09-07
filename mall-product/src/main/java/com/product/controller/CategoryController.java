@@ -2,15 +2,12 @@ package com.product.controller;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import com.beust.ah.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.product.entity.CategoryEntity;
 import com.product.service.CategoryService;
-import com.common.utils.PageUtils;
 import com.common.utils.R;
 
 

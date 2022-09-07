@@ -5,11 +5,9 @@ import java.util.Map;
 
 import com.product.vo.AttrRespVo;
 import com.product.vo.AttrVo;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.product.entity.AttrEntity;
 import com.product.service.AttrService;
 import com.common.utils.PageUtils;
 import com.common.utils.R;
@@ -28,10 +26,9 @@ public class AttrController {
     @Autowired
     private AttrService attrService;
 
-    @GetMapping("/base/list/{catelogId}")
-    public R baseAttrList(@RequestParam Map<String, Object> params, @PathVariable Long catelogId) {
-
-        PageUtils page = attrService.queryBaseAttrPage(params, catelogId);
+    @GetMapping("/{attrType}/list/{catelogId}")
+    public R attrList(@RequestParam Map<String, Object> params, @PathVariable String attrType, @PathVariable Long catelogId) {
+        PageUtils page = attrService.queryBaseAttrPage(params, attrType, catelogId);
         return R.ok().put("page", page);
     }
 
@@ -61,8 +58,6 @@ public class AttrController {
      */
     @RequestMapping("/save")
     public R save(@RequestBody AttrVo attr) {
-        AttrEntity attrEntity = new AttrEntity();
-
         attrService.saveAttr(attr);
         return R.ok();
     }

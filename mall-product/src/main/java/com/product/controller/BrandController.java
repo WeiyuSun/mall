@@ -1,9 +1,7 @@
 package com.product.controller;
 
-import java.security.Signature;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.common.utils.ResultCode;
@@ -11,7 +9,6 @@ import com.common.validator.group.AddGroup;
 import com.common.validator.group.UpdateGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,8 +20,6 @@ import com.product.entity.BrandEntity;
 import com.product.service.BrandService;
 import com.common.utils.PageUtils;
 import com.common.utils.R;
-
-import javax.validation.Valid;
 
 
 /**

@@ -11,10 +11,6 @@ import com.product.entity.CategoryBrandRelationEntity;
 import com.product.service.CategoryBrandRelationService;
 import com.common.utils.PageUtils;
 import com.common.utils.R;
-
-import javax.validation.constraints.Pattern;
-
-
 /**
  * 品牌分类关联
  *
