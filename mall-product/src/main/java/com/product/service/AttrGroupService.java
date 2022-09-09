@@ -21,5 +21,7 @@ public interface AttrGroupService extends IService<AttrGroupEntity> {
     PageUtils queryPage(Map<String, Object> params, Long id);
 
     void deleteRelations(AttrGroupRelationVo[] vos);
+
+    PageUtils getFreeAttrsInGroup(Long attrgroupId, Map<String, Object> params);
 }
 

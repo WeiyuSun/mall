@@ -4,10 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.product.dao.AttrAttrgroupRelationDao;
 import com.product.entity.CategoryEntity;
+import com.product.service.AttrAttrgroupRelationService;
 import com.product.service.AttrService;
 import com.product.service.CategoryService;
 import com.product.vo.AttrGroupRelationVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,21 +35,38 @@ public class AttrGroupController {
     private AttrGroupService attrGroupService;
 
     @Autowired
+    private AttrAttrgroupRelationService relationService;
+
+    @Autowired
     private CategoryService categoryService;
 
     @Autowired
     private AttrService attrService;
+
+//    /product/attrgroup/attr/relation
+
+    @PostMapping("/attr/relation")
+    public R addRelation(@RequestBody List<AttrGroupRelationVo> vos){
+        relationService.saveBatch(vos);
+        return R.ok();
+    }
+    @GetMapping("/{attrgroupId}/noattr/relation")
+    public R freeAttrsInGroup(@PathVariable Long attrgroupId, @RequestParam Map<String, Object> params) {
+
+        PageUtils page = attrGroupService.getFreeAttrsInGroup(attrgroupId, params);
+        System.out.println("get result: " + page.getList());
+        return R.ok().put("page", page);
+    }
 
     @GetMapping("/{attrgroupId}/attr/relation")
     public R attrRelation(@PathVariable Long attrgroupId){
         return R.ok().put("data", attrService.getAllAttrByGroupId(attrgroupId));
     }
 
-//    /product/attrgroup/attr/relation/delete
-
     @PostMapping("/attr/relation/delete")
-    public R deleteRelations(AttrGroupRelationVo[] vos){
+    public R deleteRelations(@RequestBody AttrGroupRelationVo[] vos){
         attrGroupService.deleteRelations(vos);
+        System.out.println("delete finished");
         return R.ok();
     }
     /**

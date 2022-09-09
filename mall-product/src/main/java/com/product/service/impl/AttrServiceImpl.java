@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("attrService")
-public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements AttrService {
+public class  AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements AttrService {
 
     @Autowired
     AttrAttrgroupRelationDao relationDao;
@@ -65,7 +65,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         BeanUtils.copyProperties(attr, attrEntity);
         this.save(attrEntity);
 
-        if(attr.getValueType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()){
+        if (attr.getValueType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()) {
             AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
             relationEntity.setAttrId(attrEntity.getAttrId());
             relationEntity.setAttrGroupId(attr.getAttrGroupId());
@@ -75,9 +75,9 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
     }
 
     @Override
-    public PageUtils queryBaseAttrPage(Map<String, Object> params, String attrType,  Long catelogId) {
+    public PageUtils queryBaseAttrPage(Map<String, Object> params, String attrType, Long catelogId) {
         int typeValue = ProductConstant.AttrEnum.ATTR_TYPE_SALE.getCode();
-        if("base".equalsIgnoreCase(attrType)){
+        if ("base".equalsIgnoreCase(attrType)) {
             typeValue = ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode();
         }
         QueryWrapper<AttrEntity> queryWrapper = new QueryWrapper<>();
@@ -107,7 +107,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
             AttrRespVo attrRespVo = new AttrRespVo();
             BeanUtils.copyProperties(attrEntity, attrRespVo);
 
-            if(finalTypeValue == 1){
+            if (finalTypeValue == 1) {
                 AttrAttrgroupRelationEntity attrId = relationDao.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrEntity.getAttrId()));
                 if (attrId != null) {
                     AttrGroupEntity attrGroupEntity = attrGroupDao.selectById(attrId.getAttrGroupId());
@@ -138,7 +138,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
 
         BeanUtils.copyProperties(attrEntity, attrRespVo);
 
-        if(attrEntity.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()){
+        if (attrEntity.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()) {
             AttrAttrgroupRelationEntity attrGroupRelation = relationDao.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrId));
             if (attrGroupRelation != null) {
                 attrRespVo.setAttrGroupId(attrGroupRelation.getAttrGroupId());
@@ -169,7 +169,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         BeanUtils.copyProperties(attr, attrEntity);
         this.updateById(attrEntity);
 
-        if(attrEntity.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()) {
+        if (attrEntity.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()) {
             AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
             relationEntity.setAttrGroupId(attr.getAttrGroupId());
             relationEntity.setAttrId(attr.getAttrId());
@@ -188,12 +188,16 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
 
     @Override
     public List<AttrEntity> getAllAttrByGroupId(Long attrgroupId) {
-       List<AttrAttrgroupRelationEntity> attrAttrgroupRelationEntities =  relationDao.selectList(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_group_id", attrgroupId));
+        List<AttrAttrgroupRelationEntity> attrAttrgroupRelationEntities = relationDao.selectList(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_group_id", attrgroupId));
 
         ArrayList<Long> attrIds = new ArrayList<>();
 
-        for(AttrAttrgroupRelationEntity entity: attrAttrgroupRelationEntities){
+        for (AttrAttrgroupRelationEntity entity : attrAttrgroupRelationEntities) {
             attrIds.add(entity.getAttrId());
+        }
+
+        if (attrIds == null || attrIds.isEmpty()) {
+            return new ArrayList<AttrEntity>();
         }
 
         return (List<AttrEntity>) this.listByIds(attrIds);
