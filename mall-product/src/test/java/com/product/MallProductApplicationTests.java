@@ -51,4 +51,13 @@ class MallProductApplicationTests {
         List<CategoryBrandRelationEntity> result = categoryBrandRelationService.listRelatedCat(1L);
         System.out.println(result);
     }
+
+    @Test
+    public void testGetBrandsByCatid(){
+        List<BrandEntity> result = categoryBrandRelationService.getBrandsByCatid(225L);
+
+        for(BrandEntity item: result){
+            System.out.println(item);
+        }
+    }
 }

@@ -1,9 +1,13 @@
 package com.product.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.product.entity.BrandEntity;
+import com.product.vo.BrandVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +27,27 @@ import com.common.utils.R;
 public class CategoryBrandRelationController {
     @Autowired
     private CategoryBrandRelationService categoryBrandRelationService;
+//    http://localhost:88/api/product/categorybrandrelation/brands/list?t=1662774021145&catId=225
+//    http://localhost:88/api/product/categoryBrandRelation/brands/list?t=1662774021145&catId=225
+//    http://localhost:88/api/product/categorybrandrelation/brands/list?t=1662774021145&catId=225
+//    http://localhost:88/api/product/categoryBrandRelation/brands/list?catId=225
+    @GetMapping("/brands/list")
+    public R brandsList(@RequestParam(value = "catId", required = true) Long catId){
+        System.out.println("catId is " + catId);
+        List<BrandEntity> resultList = categoryBrandRelationService.getBrandsByCatid(catId);
 
+        System.out.println("get result " + resultList);
+        List<BrandVo> modifiedResultList = new ArrayList<>();
+
+        for(BrandEntity item: resultList) {
+            BrandVo modifiedItem = new BrandVo();
+            modifiedItem.setBrandId(item.getBrandId());
+            modifiedItem.setBrandName(item.getName());
+            modifiedResultList.add(modifiedItem);
+        }
+
+        return R.ok().put("data", modifiedResultList);
+    }
 
     @GetMapping("/catelog/list")
     public R listRelatedCat(@RequestParam("brandId") Long brandId){

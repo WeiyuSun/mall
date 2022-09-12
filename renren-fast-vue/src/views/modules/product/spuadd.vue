@@ -348,10 +348,10 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import CategoryCascader from "../common/category-cascader";
 import BrandSelect from "../common/brand-select";
-import MultiUpload from "@/components/upload/multiUpload";
+import multiUpload from "../../../components/upload/multiUpload";
 export default {
   //import引入的组件需要注入到对象中才能使用
-  components: { CategoryCascader, BrandSelect, MultiUpload },
+  components: { CategoryCascader, BrandSelect, multiUpload },
   props: {},
   data() {
     return {
@@ -392,12 +392,12 @@ export default {
         brandId: [
           { required: true, message: "请选择一个品牌", trigger: "blur" }
         ],
-        decript: [
-          { required: true, message: "请上传商品详情图集", trigger: "blur" }
-        ],
-        images: [
-          { required: true, message: "请上传商品图片集", trigger: "blur" }
-        ],
+        // decript: [
+        //   { required: true, message: "请上传商品详情图集", trigger: "blur" }
+        // ],
+        // images: [
+        //   { required: true, message: "请上传商品图片集", trigger: "blur" }
+        // ],
         weight: [
           {
             type: "number",
@@ -426,6 +426,7 @@ export default {
   //监控data中的数据变化
   watch: {
     uploadImages(val) {
+
       //扩展每个skus里面的imgs选项
       let imgArr = Array.from(new Set(this.spu.images.concat(val)));
 
@@ -458,13 +459,13 @@ export default {
         brandId: "",
         weight: "",
         publishStatus: 0,
-        decript: [], 
-        images: [], 
+        decript: [],
+        images: [],
         bounds: {
           buyBounds: 0,
           growBounds: 0
         },
-        baseAttrs: [], 
+        baseAttrs: [],
         skus: []
       };
     },

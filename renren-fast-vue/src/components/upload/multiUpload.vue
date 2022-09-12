@@ -3,7 +3,7 @@
     <el-upload
       action="https://weiyu-mall.oss-us-west-1.aliyuncs.com"
       :data="dataObj"
-      list-type="picture-card"
+      :list-type="listType"
       :file-list="fileList"
       :before-upload="beforeUpload"
       :on-remove="handleRemove"
@@ -11,6 +11,7 @@
       :on-preview="handlePreview"
       :limit="maxCount"
       :on-exceed="handleExceed"
+      :show-file-list="showFile"
     >
       <i class="el-icon-plus"></i>
     </el-upload>
@@ -23,6 +24,7 @@
 import { policy } from "./policy";
 import { getUUID } from '@/utils'
 export default {
+
   name: "multiUpload",
   props: {
     //图片属性数组
@@ -31,18 +33,27 @@ export default {
     maxCount: {
       type: Number,
       default: 30
+    },
+    listType:{
+      type: String,
+      default: "picture-card"
+    },
+    showFile:{
+      type: Boolean,
+      default: true
     }
+
   },
   data() {
     return {
       dataObj: {
-        policy: "",
-        signature: "",
-        key: "",
-        ossaccessKeyId: "",
-        dir: "",
-        host: "",
-        uuid: ""
+        policy: '',
+        signature: '',
+        key: '',
+        ossaccessKeyId: '',
+        dir: '',
+        host: '',
+        uuid: ''
       },
       dialogVisible: false,
       dialogImageUrl: null
@@ -76,16 +87,19 @@ export default {
     },
     beforeUpload(file) {
       let _self = this;
+      console.log("before upload " +  _self.dataObj);
       return new Promise((resolve, reject) => {
         policy()
           .then(response => {
-            console.log("这是什么${filename}");
+            console.log("nultiupload ", response.data);
             _self.dataObj.policy = response.data.policy;
             _self.dataObj.signature = response.data.signature;
-            _self.dataObj.ossaccessKeyId = response.data.accessid;
-            _self.dataObj.key = response.data.dir + "/"+getUUID()+"_${filename}";
+            _self.dataObj.ossaccessKeyId = response.data.accessId;
+            _self.dataObj.key = response.data.dir +getUUID()+'_${filename}';
             _self.dataObj.dir = response.data.dir;
             _self.dataObj.host = response.data.host;
+
+             console.log("dataobj ", _self.dataObj);
             resolve(true);
           })
           .catch(err => {

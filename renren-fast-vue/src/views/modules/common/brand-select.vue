@@ -45,7 +45,7 @@ export default {
   methods: {
     getCatBrands() {
       this.$http({
-        url: this.$http.adornUrl("/product/categorybrandrelation/brands/list"),
+        url: this.$http.adornUrl("/product/categoryBrandRelation/brands/list"),
         method: "get",
         params: this.$http.adornParams({
           catId: this.catId

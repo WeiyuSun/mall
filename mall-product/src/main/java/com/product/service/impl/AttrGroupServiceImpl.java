@@ -1,6 +1,4 @@
 package com.product.service.impl;
-
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.common.constant.ProductConstant;
 import com.product.dao.AttrAttrgroupRelationDao;
 import com.product.dao.AttrDao;
@@ -8,7 +6,9 @@ import com.product.entity.AttrAttrgroupRelationEntity;
 import com.product.entity.AttrEntity;
 import com.product.service.AttrService;
 import com.product.vo.AttrGroupRelationVo;
+import com.product.vo.AttrGroupWithAttrsVo;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -129,6 +129,23 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
         }
         IPage<AttrEntity> page = attrService.page(new Query<AttrEntity>().getPage(params), wrapper);
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<AttrGroupWithAttrsVo> geteAttrGroupWithAttrsByCatId(Long catelogId) {
+        List<AttrGroupEntity> attrGroups = this.list(new QueryWrapper<AttrGroupEntity>().eq("catelog_id", catelogId));
+
+        List<AttrGroupWithAttrsVo> result = attrGroups.stream().map(attrGroup -> {
+            AttrGroupWithAttrsVo vo = new AttrGroupWithAttrsVo();
+            BeanUtils.copyProperties(attrGroup, vo);
+
+            List<AttrEntity> attrs = attrService.getAllAttrByGroupId(vo.getAttrGroupId());
+            vo.setAttrs(attrs);
+            return vo;
+        }).collect(Collectors.toList());
+
+
+        return result;
     }
 
 }

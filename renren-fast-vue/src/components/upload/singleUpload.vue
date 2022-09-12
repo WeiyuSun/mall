@@ -78,6 +78,7 @@
       },
       beforeUpload(file) {
         let _self = this;
+        console.log("before upload dataObj: ", _self.dataObj)
         return new Promise((resolve, reject) => {
           policy().then(response => {
             console.log("before upload", response);

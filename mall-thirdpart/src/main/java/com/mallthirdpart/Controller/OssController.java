@@ -74,6 +74,8 @@ public class OssController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+        System.out.println(respMap);
         return R.ok().put("data", respMap);
     }
 

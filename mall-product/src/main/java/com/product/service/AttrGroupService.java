@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.common.utils.PageUtils;
 import com.product.entity.AttrGroupEntity;
 import com.product.vo.AttrGroupRelationVo;
+import com.product.vo.AttrGroupWithAttrsVo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,5 +25,7 @@ public interface AttrGroupService extends IService<AttrGroupEntity> {
     void deleteRelations(AttrGroupRelationVo[] vos);
 
     PageUtils getFreeAttrsInGroup(Long attrgroupId, Map<String, Object> params);
+
+    List<AttrGroupWithAttrsVo> geteAttrGroupWithAttrsByCatId(Long catelogId);
 }
 
