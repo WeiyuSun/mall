@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.common.to.SpuBoundsTo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 import com.coupon.entity.SpuBoundsEntity;
@@ -22,7 +23,8 @@ import com.common.utils.R;
  * @date 2022-08-25 23:37:01
  */
 @RestController
-@RequestMapping("coupon/spubounds")
+@RefreshScope
+@RequestMapping("/coupon/spubounds")
 public class SpuBoundsController {
     @Autowired
     private SpuBoundsService spuBoundsService;
@@ -75,7 +77,6 @@ public class SpuBoundsController {
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("coupon:spubounds:delete")
     public R delete(@RequestBody Long[] ids){
 		spuBoundsService.removeByIds(Arrays.asList(ids));
 

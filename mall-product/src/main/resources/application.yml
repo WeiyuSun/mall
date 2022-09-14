@@ -15,6 +15,9 @@ spring:
         endpoint: https://oss-us-west-1.aliyuncs.com
   application:
     name: mall-product
+  jackson:
+    date-format: yyyy-MM-dd HH:mm
+    time-zone: America/Winnipeg
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*xml

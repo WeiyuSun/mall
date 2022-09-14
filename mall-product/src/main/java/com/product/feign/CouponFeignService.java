@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient("mall-coupon")
 public interface CouponFeignService {
-    @PostMapping("/coupon/spubounds/save")
+    @PostMapping("/mall/coupon/spubounds/save")
     R saveSpuBounds(@RequestBody SpuBoundsTo spuBoundsTo);
 
-    @PostMapping("/coupon/skufullreduction/saveinfo")
+    @PostMapping("/mall/coupon/skufullreduction/saveinfo")
     R saveSkuReduction(@RequestBody SkuReductionTo skuReductionTo);
 }

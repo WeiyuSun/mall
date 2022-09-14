@@ -45,7 +45,6 @@ public class CouponController {
     @RequestMapping("/member/list")
     public R memberCoupons(){
         CouponEntity coupon = new CouponEntity();
-        coupon.setCouponName("hello world");
         return R.ok().put("coupons", Collections.singletonList(coupon));
     }
     /**

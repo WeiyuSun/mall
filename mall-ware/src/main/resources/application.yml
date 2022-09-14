@@ -3,7 +3,7 @@ spring:
     username: weiyu
     password: '0000'
     url: jdbc:mysql://149.28.126.51:3306/mall_wms?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
   cloud:
     nacos:
       discovery:
