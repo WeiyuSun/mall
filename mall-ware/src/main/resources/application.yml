@@ -11,6 +11,9 @@ spring:
 
   application:
       name: mall-ware
+  jackson:
+    date-format: yyyy-MM-dd HH:mm
+    time-zone: America/Winnipeg
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*xml
@@ -22,3 +25,6 @@ server:
   port: 11000
   servlet:
     context-path: /mall
+logging:
+  level:
+    com.product: debug

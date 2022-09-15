@@ -16,7 +16,6 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button
-          v-if="isAuth('ware:purchase:save')"
           type="primary"
           @click="addOrUpdateHandle()"
         >新增</el-button>
@@ -124,7 +123,7 @@ export default {
     this.getDataList();
   },
   created() {
-    
+
   },
   methods: {
     opendrawer(row){
@@ -160,7 +159,7 @@ export default {
             type: "success",
             duration: 1500
           });
-          
+
           this.userId = "";
           this.getDataList();
         } else {
