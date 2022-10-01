@@ -2,8 +2,10 @@ package com.ware.service.impl;
 
 import feign.QueryMap;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -19,6 +21,8 @@ import com.ware.service.WareSkuService;
 
 @Service("wareSkuService")
 public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> implements WareSkuService {
+    @Autowired
+    WareSkuDao wareSkuDao;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -30,7 +34,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         }
 
         String wareId = (String) params.get("wareId");
-        if(!StringUtils.isEmpty(wareId)) {
+        if (!StringUtils.isEmpty(wareId)) {
             queryWrapper.eq("ware_id", wareId);
         }
 
@@ -40,6 +44,21 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public void addStock(Long skuId, Long wareId, Integer skuNum) {
+        List<WareSkuEntity> entities = wareSkuDao.selectList(new QueryWrapper<WareSkuEntity>().eq("sku_id", skuId).eq("ware_id", wareId));
+        if(entities == null || entities.isEmpty()) {
+            WareSkuEntity wareSkuEntity = new WareSkuEntity();
+            wareSkuEntity.setSkuId(skuId);
+            wareSkuEntity.setStock(skuNum);
+            wareSkuEntity.setWareId(wareId);
+            wareSkuDao.insert(wareSkuEntity);
+        } else {
+            wareSkuDao.addStock(skuId, wareId, skuNum);
+        }
+
     }
 
 }

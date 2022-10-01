@@ -4,14 +4,14 @@ import com.common.constant.PurchaseDetailStatus;
 import com.common.constant.PurchaseStatus;
 import com.ware.entity.PurchaseDetailEntity;
 import com.ware.service.PurchaseDetailService;
+import com.ware.service.WareSkuService;
 import com.ware.vo.MergeVo;
+import com.ware.vo.PurchaseDoneVo;
+import com.ware.vo.PurchaseItemDoneVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -31,6 +31,9 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
 
     @Autowired
     PurchaseDetailService purchaseDetailService;
+
+    @Autowired
+    WareSkuService wareSkuService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -110,6 +113,46 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
 
             purchaseDetailService.updateBatchById(detailEntities);
         }
+    }
+
+    @Override
+    @Transactional
+    public void done(PurchaseDoneVo doneVo) {
+        Long id = doneVo.getId();
+
+        List<PurchaseItemDoneVo> items = doneVo.getItems();
+        List<PurchaseDetailEntity> updates = new ArrayList<>();
+        boolean haseError = false;
+        for(PurchaseItemDoneVo item: items){
+            PurchaseDetailEntity purchaseDetailEntity = new PurchaseDetailEntity();
+            if(item.getStatus().equals(PurchaseDetailStatus.ERROR)) {
+                purchaseDetailEntity.setStatus(PurchaseDetailStatus.ERROR);
+                haseError = true;
+            } else {
+                PurchaseDetailEntity detail = purchaseDetailService.getById(item.getItemId());
+                purchaseDetailEntity.setStatus(PurchaseDetailStatus.FINISH);
+                wareSkuService.addStock(detail.getSkuId(), detail.getWareId(), detail.getSkuNum());
+            }
+
+            purchaseDetailEntity.setId(item.getItemId());
+            updates.add(purchaseDetailEntity);
+        }
+
+        purchaseDetailService.updateBatchById(updates);
+
+        PurchaseEntity purchaseEntity = new PurchaseEntity();
+        purchaseEntity.setId(id);
+
+        if(!haseError) {
+            purchaseEntity.setStatus(PurchaseStatus.FINISHED);
+        } else {
+            purchaseEntity.setStatus(PurchaseStatus.ERROR);
+        }
+
+        purchaseEntity.setCreateTime(new Date());
+        this.updateById(purchaseEntity);
+
+
     }
 
 }
