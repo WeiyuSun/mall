@@ -1,14 +1,12 @@
 package com.ware.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.common.to.SkuHasStockVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ware.entity.WareSkuEntity;
 import com.ware.service.WareSkuService;
@@ -39,6 +37,19 @@ public class WareSkuController {
         PageUtils page = wareSkuService.queryPage(params);
 
         return R.ok().put("page", page);
+    }
+
+    @PostMapping("/hasstock")
+    public List<SkuHasStockVo> getSkusHasStock(@RequestBody List<Long> skuIds){
+        System.out.println("接收数据");
+        System.out.println(skuIds);
+        List<SkuHasStockVo> vos = wareSkuService.getSkusHasStock(skuIds);
+        R<List<SkuHasStockVo>> ok = R.ok();
+        ok.setData(vos);
+        System.out.println("输出结果");
+        System.out.println(ok.getData());
+        System.out.println(ok);
+        return vos;
     }
 
 

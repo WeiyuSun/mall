@@ -21,5 +21,6 @@
         <module>mall-common</module>
         <module>mall-gateway</module>
         <module>mall-thirdpart</module>
+        <module>mall-search</module>
     </modules>
 </project>
