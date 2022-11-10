@@ -19,6 +19,10 @@ spring:
     date-format: yyyy-MM-dd HH:mm
     time-zone: America/Winnipeg
 
+  thymeleaf:
+    cache: false
+
+
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*xml
 #  configuration:
